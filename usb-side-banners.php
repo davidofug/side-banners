@@ -22,8 +22,8 @@ function usb_banner_options() {
 	// Save attachment ID
 	if ( isset( $_POST['save_settings'] )):
 	if(isset( $_POST['lon'])){
-		$lon = intval(sanitize_text_field($_POST['lon'])); //Sanitize input and convert to interger
-		$lon = absint($lon); //Make sure value is not a negative otherwise convert it
+		$lon = sanitize_text_field($_POST['lon']); //Sanitize input and convert to interger
+		$lon = absint( $lon); //Shouldn't be negative value otherwise convert it
 		update_option( 'lon', $lon); //Send to value to database
 		}
 	if(isset( $_POST['lban_id'])){
@@ -44,7 +44,7 @@ function usb_banner_options() {
 	if(isset( $_POST['rban_id'])){
 		$rbanid = intval(sanitize_text_field($_POST['rban_id']));//Sanitize input and convert to interger
 		$rbanid	= absint( $rbanid); //Make sure value is not a negative otherwise convert it	
-		update_option( 'rban_attachment_id',$rbanid));
+		update_option( 'rban_attachment_id',$rbanid);
 		}
 	if(isset( $_POST['rurl'])){
 		$rurl = sanitize_text_field($_POST['rurl']); //Sanitize input
@@ -66,7 +66,7 @@ function usb_banner_options() {
 		update_option( 'tab', $tab);
 		}
 	if(isset( $_POST['mode'])){
-		$usb_mode = sanitize_text_field($_POST['tab']);//Sanitize input
+		$usb_mode = sanitize_text_field($_POST['mode']);//Sanitize input
 		update_option( 'mode', $usb_mode);
 		}
 	if(isset( $_POST['hideon'])){
@@ -83,14 +83,15 @@ function usb_banner_options() {
 		endif;
 	wp_enqueue_media();
 ?>
-<h2>Side banners</h2>
+<h2>Ultimate Side banners</h2>
 <hr/>
-<p>Do you have a WordPress website where you want to utilize the empty space on the sides? This plugin is for you. It allows you to add two similar or different banner Images to your website.</p>
-<p>If you provide a URL (Link), the banners will redirect your website visitors to the targeted link. This can improve website monitization. Feel free to play around with the options in the additional settings section. Have questions and inquiries? <a href="https://fictiontoactual.wordpress.com/contact/" target="_blank">Contact me</a></p>
+<p>Do you have a WordPress website where you want to utilize the empty space on the sides? This plugin is for you. It allows to add two similar or different banners in formats of JPG|PNG|GIF to your website.</p>
+<p>If you provide a URL (Link), the banners will redirect your website visitors to the targeted link once clicked. This can improve website monitization. Feel free to play around with the options under Additional settings section.Do you have questions and inquiries? <a href="https://fictiontoactual.wordpress.com/contact/" target="_blank">Contact me</a></p>
 <form method="post">
 <h3><?php _e( 'Left banner','side-banners'); ?></h3>
 <hr/>
-<p><label for="lon"><input type="checkbox" name="lon" id="lon" value="1" <?php if(get_option("lon")==1){ ?>checked="checked" <?php }?>/>Turn on/off</p>
+<p><label for="lon">Turn <input type="radio" name="lon" id="lon" value="1" <?php if(get_option("lon")==1){ ?> checked="checked" <?php }?>/> On
+<input type="radio" name="lon" id="lon" value="0" <?php if(get_option("lon")==0){ ?> checked="checked" <?php }?>/> Off</p>
 	<div class='image-preview-wrapper'>
 		<img id='l_image-preview' src='<?php echo wp_get_attachment_url( get_option( 'lban_attachment_id' ) ); ?>' style="height:auto; width:120px" />
 	</div>
@@ -100,18 +101,19 @@ function usb_banner_options() {
 	<input type='hidden' name='lban_id' id='lban_id' value='<?php echo get_option( 'lban_attachment_id' ); ?>' /> 
 <h3><?php _e( 'Right banner','side-banners'); ?></h3>
 <hr/>
-<p><label for="ron"><input type="checkbox" name="ron" id="ron" value="1" <?php if(get_option("ron")==1){ ?>checked="checked" <?php }?> /> Turn on/off</p>
+<p><label for="ron">Turn <input type="radio" name="ron" id="ron" value="1" <?php if(get_option("ron")==1){ ?>checked="checked" <?php }?> /> On
+<input type="radio" name="ron" id="ron" value="0" <?php if(get_option("ron")==0){ ?>checked="checked" <?php }?> /> Off</p>
 <p><label for="rurl"><?php _e( 'Link ','side-banners'); ?></label><input type="text" name="rurl" id="rurl" value="<?php echo !empty(get_option( 'rurl' ))?esc_url(get_option('rurl')):'#'; ?>" /></p>
 	<div class='image-preview-wrapper'>
 		<img id='r_image-preview' src='<?php echo wp_get_attachment_url( get_option( 'rban_attachment_id' ) ); ?>' style="height:auto; width:120px">
 	</div>
 	<input id="rban_upload" name="rban_upload" type="button" class="button btn-upload" value="<?php _e( 'Add banner','side-banners'); ?>" />
 	<input id="rban_remove" name="rban_remove" type="button" class="button btn-remove" value="<?php _e( 'Remove banner','side-banners'); ?>" />
-	<input type='hidden' name='rban_id' id='rban_id' value='<?php echo get_option( 'rban_attachment_id' ); ?>' />
+	<input type='hidden' name='rban_id' id='rban_id' value='<?php echo absint(intval(get_option( 'rban_attachment_id' ))); ?>' />
 <h3><?php _e( 'Additional settings','side-banners'); ?></h3>
 <hr/>
-<p><label for="topoffset"><?php _e( 'Distance from top: ','side-banners'); ?></label><input type="text" name="topoffset" id="topoffset" value="<?php if(empty(get_option( 'topoffset' ))){ echo "50";}else{ echo get_option('topoffset'); }?>" /> px, <span class="description">Works only if scroll mode is set to static.</span></p>
-<p><label for="bwidth"><?php _e( 'Banner width: ','side-banners'); ?></label><input type="text" name="bwidth" id="bwidth" value="<?php echo get_option( 'bwidth' ); ?>" /> px</p>
+<p><label for="topoffset"><?php _e( 'Distance from top: ','side-banners'); ?></label><input type="text" name="topoffset" id="topoffset" value="<?php if(empty(get_option( 'topoffset' ))){ echo "50";}else{ echo esc_html(get_option('topoffset')); }?>" /> px, <span class="description">Works only if scroll mode is set to static.</span></p>
+<p><label for="bwidth"><?php _e( 'Banner width: ','side-banners'); ?></label><input type="text" name="bwidth" id="bwidth" value="<?php if(empty(get_option( 'bwidth' ))){ echo "120";}else{echo esc_html(get_option( 'bwidth' )); } ?>" /> px</p>
 <p><?php _e( 'Scroll mode  ','side-banners'); ?><label for="scroll"><input type="radio" name="mode" id="scroll" value="scroll" <?php if(get_option('mode')=="scroll"){ ?>checked="checked"<?php }?> / ><?php _e( 'Scroll ','side-banners'); ?></label>
 <label for="static"><input type="radio" name="mode" id="static" value="static" <?php if(get_option('mode')=="static"){ ?>checked="checked"<?php }?> /><?php _e( 'Static','side-banners'); ?></label></p>
 <p><?php _e( 'Load in ','side-banners'); ?><label for="new_tab"><input type="radio" name="tab" id="new_tab" value="new_tab" <?php if(get_option('tab')=="new_tab"){ ?>checked="checked"<?php }?> / ><?php _e( 'New tab/Window ','side-banners'); ?></label> <label for="same"><input type="radio" name="tab" id="same" value="same" <?php if(get_option('tab')=="same"){ ?>checked="checked"<?php }?>  /><?php _e( 'Same ','side-banners'); ?></label></p>
@@ -194,7 +196,7 @@ if(get_option("lon")==1):
 ?>
 <div class="floatbanners left">
 <a href="<?php echo esc_url(get_option('lurl')); ?>" <?php if(get_option("tab")=="new_tab"){ echo 'target="_blank"'; } ?>>
-<img src="<?php echo wp_get_attachment_url( get_option( 'lban_attachment_id' ) ); ?>" style="width: <?php echo (!empty(get_option('bwidth'))) ? get_option('bwidth').'px':'120px'; ?>">
+<img src="<?php echo wp_get_attachment_url( get_option( 'lban_attachment_id' ) ); ?>" style="width: <?php echo (!empty(get_option('bwidth'))) ? esc_html(get_option('bwidth')).'px':'120px'; ?>">
 </a>
 </div>
 <?php endif; 
@@ -202,7 +204,7 @@ if(get_option("ron")==1):
 ?>
 <div class="floatbanners right">
 <a href="<?php echo esc_url(get_option('rurl')); ?>" <?php if(get_option("tab")=="new_tab"){ echo 'target="_blank"'; } ?>>
-<img src="<?php echo wp_get_attachment_url( get_option( 'rban_attachment_id' ) ); ?>" style="width: <?php echo (!empty(get_option('bwidth')))?get_option('bwidth').'px':'120px'; ?>">
+<img src="<?php echo wp_get_attachment_url( get_option( 'rban_attachment_id' ) ); ?>" style="width: <?php echo (!empty(get_option('bwidth')))?esc_html(get_option('bwidth')).'px':'120px'; ?>">
 </a>
 </div>
 <?php endif;?>
@@ -221,17 +223,17 @@ function usb_style_banners(){
 	right:1px;
 	}
 .floatbanners{
-		position:<?php if(get_option('mode')=="static"){ echo "fixed;"; }else{ echo "relative;"; } ?>
-		top:<?php if(!empty(get_option('topoffset')) && get_option('mode')=="static"){ echo get_option('topoffset')."px;";}else{ echo "50px;";}?>
-		width:<?php if(!empty(get_option('bwidth'))){ echo get_option('bwidth')."px;";}else{ echo "120px;"; }?>
+		position:<?php if(get_option('mode')=="static"){ echo "fixed;\n"; }else{ echo "relative;\n"; } ?>
+		top:<?php if(!empty(get_option('topoffset')) && get_option('mode')=="static"){ echo esc_html(get_option('topoffset'))."px;\n";}else{ echo "50px;\n";}?>
+		width:<?php if(!empty(get_option('bwidth'))){ echo esc_html(get_option('bwidth'))."px;\n";}else{ echo "120px;\n"; }?>
 	}
-<?php if(strpos("xs",get_option('hideon'))){ //Check of hide on extra small devices is on?>
+<?php if(strpos(get_option('hideon'),"xs")){ //Check of hide on extra small devices is on?>
 @media only screen and (max-width:768px){
 	.floatbanners{
 		display:none !important;
 		}
 	}
-<?php } if(strpos("small",get_option('hideon'))){ //Check of hide on Small devices is on ?>
+<?php } if(strpos(get_option('hideon'),"small")){ //Check of hide on Small devices is on ?>
 @media only screen and (max-width:1280px){
 	.floatbanners{
 		display:none !important;

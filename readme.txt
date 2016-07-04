@@ -1,14 +1,14 @@
-=== Side banners ===
-Contributors: dwampambaa
+=== Ultimate Side banners ===
+Contributors: David M. Wampamba
 Donate link: http://fictiontoactual.wordpress.com/donate
-Tags: Side, Banners, Left, Right, Fixed, Static
-Requires at least: 0.0.1
+Tags: Side, Banners, Left, Right, Fixed, Static, 200pxby600px
+Requires at least: 3.2
 Tested up to: 4.5.3
 Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Improve conversion by displaying Ads in a prominent positions on your site.
+Improve conversion by displaying Ads in prominent positions of your site.
 
 == Description ==
 Improve conversion by displaying ads in a prominent locations on your site, best when your website layout has some space at the sides.
@@ -25,7 +25,7 @@ These 3 steps will get you up and running.
 
 1. Upload the plugin files to the `/wp-content/plugins` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Use the Side Banners screen just below Tools to configure the plugin
+3. See Ultimate Side Banners menu to add banners and configure settings.
 
 
 == Frequently Asked Questions ==
@@ -47,19 +47,26 @@ No. It is shipped with it's own CSS which is responsible for the position of the
 You can do one of these things below.
 1. Request the feature by contacting me on http://twitter.com/idesignwebs
 2. Contribute code by forking to your account on http://github.com
-3. Donate to allow me give more time to the plugin.
+3. Kindly Donate to support development and integration of more features. E.g More positions and support for Ad code such as Adsense. 
 
 = Are you available for hire? =
-Yes, just use the above twitter address.
+Yes, just use the above twitter address to reach out.
 
 == Screenshots ==
 
-1. Screenshots to come in version 0.0.3
+1. Screenshots to come in version 0.0.4
 
 == Changelog ==
-
-No changes so far.
+= 2016/July/04 =
+* Fixed some security issues
+* Fixed some bug about On and Off switch
+* Fixed the bug with hiding the banners extra small and small devices.
+* Pre-fixed functions with usb_
+* Changed Plugin name from Sidebanners to Ulimate Side banners
+* Plugin folder changed from side-banners to usb-side-bannenrs
+* Corrected some spelling and grammar errors in the description and installation instructions
+* Matured from version 0.0.1 to 0.0.2
 
 == Upgrade Notice ==
-
-More mobile suppport features comming in version 0.0.2
+1. Version 0.0.2 has major changes but not the promised Mobile Support features.
+2. Mobile support features comming in version 0.0.3
