@@ -1,63 +1,82 @@
 <?php
 /*
-Plugin Name: SideBanners
-Version: 0.0.1
-Description: Side banners is made to simplify the process of adding side banners to your WordPress website. You don't have touch any piece of code. Note, the banners are placed at the extreme left and right side of the Webpage, so it fits with all kinds of websites which have some extra space of a minimum 120px wide.
+Plugin Name: Ultimate Side Banners
+Version: 0.0.2
+Description: Ultimate Side Banners, helps simplify the process of adding side banners to your WordPress website. You don't have touch any piece of code. Note, the banners are placed at the extreme left and right side of the Webpage, so it fits with all kinds of websites which have some extra space of a minimum 120px wide.
 Author: David Wampamba (Gagawala Graphics Limited)
 Author URI: http://fictiontoactual.wordpress.com
-Plugin URI: gagawalagraphics.com/wp/plugins/side-banners.zip
-Text Domain: side-banners
+Plugin URI: http://github/wampamba/ultimate-side-banners
+Text Domain: usb-side-banners
 */
 /** Step 2 (Add action hook to admin menu). */
-add_action('admin_menu', 'banner_menu');
+add_action('admin_menu', 'usb_banner_menu');
 /** Step 1. */
-function banner_menu() {
-	add_menu_page( 'Side Banners', 'Side Banners', 'manage_options', 'left-right-banners', 'banner_options','',70 );
+function usb_banner_menu() {
+	add_menu_page( 'Ultimate Side Banners', 'Ultimate Side Banners', 'manage_options', 'ultimate-side-banners', 'usb_banner_options','',70 );
 }
 /** Step 3. */
-function banner_options() {
+function usb_banner_options() {
 	if ( !current_user_can( 'manage_options' ) ){
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
 	// Save attachment ID
 	if ( isset( $_POST['save_settings'] )):
 	if(isset( $_POST['lon'])){
-		update_option( 'lon', absint( $_POST['lon']));
+		$lon = intval(sanitize_text_field($_POST['lon'])); //Sanitize input and convert to interger
+		$lon = absint($lon); //Make sure value is not a negative otherwise convert it
+		update_option( 'lon', $lon); //Send to value to database
 		}
 	if(isset( $_POST['lban_id'])){
-		update_option( 'lban_attachment_id', absint( $_POST['lban_id']));
+		$lbanid = intval(sanitize_text_field($_POST['lban_id']));//Sanitize input and convert to interger
+		$lbanid	=	absint( $lbanid); //Make sure value is not a negative otherwise convert it
+		update_option( 'lban_attachment_id', $lbanid); //Send value to database
 		}
 	if(isset( $_POST['lurl'])){
-		update_option( 'lurl', $_POST['lurl']);
+		$lurl = sanitize_text_field($_POST['lurl']); //Sanitize input
+		$lurl = esc_url_raw($lurl); //Prepare url for database storage
+		update_option( 'lurl', $lurl);
 		}
 	if(isset( $_POST['ron'])){
-		update_option( 'ron', absint( $_POST['ron']));
+		$ron = intval(sanitize_text_field($_POST['ron'])); //Sanitize input and convert to interger
+		$ron = absint( $ron); //Shouldn't be negative value otherwise convert it
+		update_option( 'ron',$ron);
 		}
 	if(isset( $_POST['rban_id'])){
-		update_option( 'rban_attachment_id', absint( $_POST['rban_id']));
+		$rbanid = intval(sanitize_text_field($_POST['rban_id']));//Sanitize input and convert to interger
+		$rbanid	= absint( $rbanid); //Make sure value is not a negative otherwise convert it	
+		update_option( 'rban_attachment_id',$rbanid));
 		}
 	if(isset( $_POST['rurl'])){
-		update_option( 'rurl', $_POST['rurl']);
+		$rurl = sanitize_text_field($_POST['rurl']); //Sanitize input
+		$rurl = esc_url_raw($rurl); //Prepare url for database storage
+		update_option( 'rurl', $rurl);
 		}
 	if(isset( $_POST['topoffset'])){
-		update_option( 'topoffset', $_POST['topoffset']);
+		$topoffset = intval(sanitize_text_field($_POST['topoffset']));//Sanitize input and convert to interger
+		$topoffset = absint( $topoffset); //Make sure value is not a negative otherwise convert it		
+		update_option( 'topoffset', $topoffset);
 		}
 	if(isset( $_POST['bwidth'])){
-		update_option( 'bwidth', absint( $_POST['bwidth']));
+		$bwidth = intval(sanitize_text_field($_POST['bwidth']));//Sanitize input and convert to interger
+		$bwidth	= absint( $bwidth); //Make sure value is not a negative otherwise convert it
+		update_option( 'bwidth', $bwidth);
 		}
 	if(isset( $_POST['tab'])){
-		update_option( 'tab', $_POST['tab']);
+		$tab = sanitize_text_field($_POST['tab']);//Sanitize input
+		update_option( 'tab', $tab);
 		}
 	if(isset( $_POST['mode'])){
-		update_option( 'mode', $_POST['mode']);
+		$usb_mode = sanitize_text_field($_POST['tab']);//Sanitize input
+		update_option( 'mode', $usb_mode);
 		}
 	if(isset( $_POST['hideon'])){
 		if(is_array($_POST['hideon'])){
 		foreach($_POST['hideon'] as $value){
+			$value = sanitize_text_field($value); //Sanitize value
 			$hideon .=$value.' ';
 		}
 		}else{
-			$hideon = $_POST['hideon'];
+			$hideon = sanitize_text_field($_POST['hideon']); //Sanitize input
 		}
 		update_option( 'hideon', $hideon);
 	}
@@ -75,14 +94,14 @@ function banner_options() {
 	<div class='image-preview-wrapper'>
 		<img id='l_image-preview' src='<?php echo wp_get_attachment_url( get_option( 'lban_attachment_id' ) ); ?>' style="height:auto; width:120px" />
 	</div>
-	<p><label for="lurl"><?php _e( 'Link ','side-banners'); ?></label><input type="text" name="lurl" id="lurl" value="<?php echo !empty(get_option( 'lurl' ))?get_option('lurl'):'#'; ?>" /> </p>
+	<p><label for="lurl"><?php _e( 'Link ','side-banners'); ?></label><input type="text" name="lurl" id="lurl" value="<?php echo !empty(get_option( 'lurl' ))? esc_url(get_option('lurl')):'#'; ?>" /> </p>
 	<input id="lban_upload" name="lban_upload" type="button" class="button btn-upload" value="<?php _e( 'Add banner','side-banners'); ?>" />
 	<input id="lban_remove" name="lban_remove" type="button" class="button btn-remove" value="<?php _e( 'Remove banner','side-banners'); ?>" />
 	<input type='hidden' name='lban_id' id='lban_id' value='<?php echo get_option( 'lban_attachment_id' ); ?>' /> 
 <h3><?php _e( 'Right banner','side-banners'); ?></h3>
 <hr/>
 <p><label for="ron"><input type="checkbox" name="ron" id="ron" value="1" <?php if(get_option("ron")==1){ ?>checked="checked" <?php }?> /> Turn on/off</p>
-<p><label for="rurl"><?php _e( 'Link ','side-banners'); ?></label><input type="text" name="rurl" id="rurl" value="<?php echo !empty(get_option( 'rurl' ))?get_option('rurl'):'#'; ?>" /></p>
+<p><label for="rurl"><?php _e( 'Link ','side-banners'); ?></label><input type="text" name="rurl" id="rurl" value="<?php echo !empty(get_option( 'rurl' ))?esc_url(get_option('rurl')):'#'; ?>" /></p>
 	<div class='image-preview-wrapper'>
 		<img id='r_image-preview' src='<?php echo wp_get_attachment_url( get_option( 'rban_attachment_id' ) ); ?>' style="height:auto; width:120px">
 	</div>
@@ -105,8 +124,8 @@ function banner_options() {
 </form>
 <?php
 }
-add_action( 'admin_footer', 'banner_scripts' );
-function banner_scripts() {
+add_action( 'admin_footer', 'usb_banner_scripts' );
+function usb_banner_scripts() {
 	$lban_id = get_option( 'lban_attachment_id', 0 );
 	$rban_id = get_option( 'rban_attachment_id', 0 );
 	?><script type='text/javascript'>
@@ -169,12 +188,12 @@ function banner_scripts() {
 	</script><?php
 
 }
-add_action("wp_footer","show_banners"); //Show the banners to website visitors. Hook to the footer wp_footer action
-function show_banners(){
+add_action("wp_footer","usb_show_banners"); //Show the banners to website visitors. Hook to the footer wp_footer action
+function usb_show_banners(){
 if(get_option("lon")==1):
 ?>
 <div class="floatbanners left">
-<a href="<?php echo trim(get_option('lurl')); ?>" <?php if(get_option("tab")=="new_tab"){ echo 'target="_blank"'; } ?>>
+<a href="<?php echo esc_url(get_option('lurl')); ?>" <?php if(get_option("tab")=="new_tab"){ echo 'target="_blank"'; } ?>>
 <img src="<?php echo wp_get_attachment_url( get_option( 'lban_attachment_id' ) ); ?>" style="width: <?php echo (!empty(get_option('bwidth'))) ? get_option('bwidth').'px':'120px'; ?>">
 </a>
 </div>
@@ -182,15 +201,15 @@ if(get_option("lon")==1):
 if(get_option("ron")==1):
 ?>
 <div class="floatbanners right">
-<a href="<?php echo trim(get_option('rurl')); ?>" <?php if(get_option("tab")=="new_tab"){ echo 'target="_blank"'; } ?>>
+<a href="<?php echo esc_url(get_option('rurl')); ?>" <?php if(get_option("tab")=="new_tab"){ echo 'target="_blank"'; } ?>>
 <img src="<?php echo wp_get_attachment_url( get_option( 'rban_attachment_id' ) ); ?>" style="width: <?php echo (!empty(get_option('bwidth')))?get_option('bwidth').'px':'120px'; ?>">
 </a>
 </div>
 <?php endif;?>
 <?php
 }
-add_action("wp_head","style_banners"); //Hook a stylesheet for the banners to the wp_head action
-function style_banners(){
+add_action("wp_head","usb_style_banners"); //Hook a stylesheet for the banners to the wp_head action
+function usb_style_banners(){
 ?>
 <style type="text/css">
 .floatbanners.left{
